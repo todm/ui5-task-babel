@@ -1,0 +1,15 @@
+specVersion: "2.3"
+kind: extension
+type: task
+metadata:
+  name: ui5-task-babel
+task:
+  path: lib/babel/task.js
+---
+specVersion: "2.3"
+kind: extension
+type: server-middleware
+metadata:
+  name: ui5-middleware-babel
+middleware:
+  path: lib/babel/middleware.js

@@ -1,0 +1,19 @@
+{
+  "name": "ui5-task-babel",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "ui5 build --config ./test/ui5-test.yaml --dest ./test/dist --clean-dest",
+    "test:serve": "ui5 serve --config ./test/ui5-test.yaml"
+  },
+  "devDependencies": {
+    "@ui5/cli": "^2.10.3"
+  },
+  "dependencies": {
+    "@babel/core": "^7.14.0",
+    "@babel/preset-env": "^7.14.1",
+    "@ui5/logger": "^2.0.1",
+    "micromatch": "^4.0.4"
+  }
+}

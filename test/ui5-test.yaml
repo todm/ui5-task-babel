@@ -1,0 +1,33 @@
+specVersion: '2.3'
+metadata:
+  name: ui5-task-babel
+type: application
+resources:
+  configuration:
+    paths:
+      webapp: ./test/webapp
+builder:
+  customTasks:
+    - name: babel-task
+      beforeTask: generateComponentPreload
+server:
+  customMiddleware:
+    - name: babel-middleware
+      beforeMiddleware: serveResources
+
+---
+specVersion: "2.3"
+kind: extension
+type: task
+metadata:
+  name: babel-task
+task:
+  path: lib/babel/task.js
+---
+specVersion: "2.3"
+kind: extension
+type: server-middleware
+metadata:
+  name: babel-middleware
+middleware:
+  path: lib/babel/middleware.js
