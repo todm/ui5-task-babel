@@ -13,3 +13,29 @@ metadata:
   name: ui5-middleware-babel
 middleware:
   path: lib/babel/middleware.js
+---
+specVersion: "2.3"
+kind: extension
+type: project-shim
+metadata:
+  name: ui5-task-babel-polyfill
+shims:
+  configurations:
+    core-js-bundle:
+      specVersion: "2.3"
+      type: module
+      metadata:
+        name: core-js-bundle
+      resources:
+        configuration:
+          paths:
+            /resources/polyfills/core-js-bundle/: ""
+    regenerator-runtime:
+      specVersion: "2.3"
+      type: module
+      metadata:
+        name: regenerator-runtime
+      resources:
+        configuration:
+          paths:
+            /resources/polyfills/regenerator-runtime/: ""
