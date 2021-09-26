@@ -9,7 +9,7 @@ Without any configuration the task will use `@babel/preset-env` to transpile the
 Add the task to your project as a dev dependency.
 
 ```sh
-npm i -D git+https://github.com/todm/ui5-task-babel.git
+npm i -D @todms/ui5-task-babel
 ```
 
 Add the package to the ui5 dependencies of `package.json`
@@ -18,7 +18,7 @@ Add the package to the ui5 dependencies of `package.json`
 "ui5": {
   "dependencies": [
     #...
-    "ui5-task-babel"
+    "@todms/ui5-task-babel"
   ]
 }
 ```
@@ -98,7 +98,7 @@ Then add those packages as ui5 dependencies
 "ui5": {
   "dependencies": [
     #...
-    "ui5-task-babel",
+    "@todms/ui5-task-babel",
     "core-js-bundle",
     "regenerator-runtime"
   ]
