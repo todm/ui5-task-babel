@@ -15,12 +15,10 @@ npm i -D @todms/ui5-task-babel
 Add the package to the ui5 dependencies of `package.json`
 
 ```yaml
-"ui5": {
-  "dependencies": [
-    #...
-    "@todms/ui5-task-babel"
-  ]
-}
+"ui5": { "dependencies": [
+        #...
+        "@todms/ui5-task-babel",
+      ] }
 ```
 
 # Include Task and Middleware
@@ -65,19 +63,22 @@ You can add the following configurations to the task:
 
 You can add the following configurations to the middleware:
 
-| Name          | Type                 | Default                        | Description                                                                                                     |
-| ------------- | -------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------- |
-| include       | `string \| string[]` | `[**/*.js]`                    | Files that should be included                                                                                   |
-| exclude       | `string \| string[]` | `[]`                           | Files that should be excluded                                                                                   |
-| babelConfig   | `Object`             | preset-env + Inline SourceMaps | Babel configuration                                                                                             |
-| searchInclude | `string \| string[]` | `[**/*.js]`                    | Files that should be included when Searching the project for fitting files                                      |
-| passFile      | `boolean`            | `false`                        | Wether the file should be passed to the next middleware (Only works if next middleware checks `req.passedFile`) |
-| iife          | `boolen`             | `true`                         | Wraps code as iife to ensure top level scope                                                                    |
+| Name          | Type                      | Default                        | Description                                                                                                                               |
+| ------------- | ------------------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| include       | `string \| string[]`      | `[**/*.js]`                    | Files that should be included                                                                                                             |
+| exclude       | `string \| string[]`      | `[]`                           | Files that should be excluded                                                                                                             |
+| babelConfig   | `Object`                  | preset-env + Inline SourceMaps | Babel configuration                                                                                                                       |
+| searchInclude | `string \| string[]`      | `[**/*.js]`                    | Files that should be included when Searching the project for fitting files                                                                |
+| passFile      | `boolean`                 | `false`                        | Wether the file should be passed to the next middleware (Only works if next middleware checks `req.passedFile`)                           |
+| iife          | `boolen`                  | `true`                         | Wraps code as iife to ensure top level scope                                                                                              |
+| onError       | `'next'\|'error'\|'exit'` | `'error'`                      | Defines behaviour when an error occures. `next`: next middleware will be called, `error`: server will return 503, `exit`: Server will end |
 
 # Regenerator-Runtime and Polyfills
+
 Depending on your babel configuration and the usage of `async/await` or other non-transpilable js features you may need to add polyfills to your app.
 
 If your app runs standalone via an `index.html` file this can easily be done by including the corresponding js files with a script tag.
+
 ```html
 <script src="https://polyfill.io/v3/polyfill.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/regenerator-runtime@0.13.9/runtime.min.js"></script>
@@ -88,21 +89,21 @@ If you load your app in **launchpad** and can't change the html file or you don'
 **Project shims for regenerator-runtime and core-js are already provided in this package**
 
 Add regenerator-runtime and core-js-bundle as dependencies
+
 ```sh
 npm i -D core-js-bundle regenerator-runtime
 ```
 
 Then add those packages as ui5 dependencies
+
 ```yaml
 # package.json
-"ui5": {
-  "dependencies": [
-    #...
-    "@todms/ui5-task-babel",
-    "core-js-bundle",
-    "regenerator-runtime"
-  ]
-}
+"ui5": { "dependencies": [
+        #...
+        "@todms/ui5-task-babel",
+        "core-js-bundle",
+        "regenerator-runtime",
+      ] }
 ```
 
 Regenerator-runtime and core-js will now be added to your projects resource folder.
@@ -112,19 +113,19 @@ You can register them in your `manifest.json`, import them directly in a control
 # manifest.json
 {
   # ...
-  "sap.ui5": {
-    "resources": {
-      "js": [
-        {"uri": "/resources/polyfills/core-js-bundle/minified.js"},
-        {"uri": "/resources/polyfills/regenerator-runtime/runtime.js"}
-      ]
-    }
-  }
+  "sap.ui5":
+    {
+      "resources":
+        {
+          "js":
+            [
+              { "uri": "/resources/polyfills/core-js-bundle/minified.js" },
+              { "uri": "/resources/polyfills/regenerator-runtime/runtime.js" },
+            ],
+        },
+    },
 }
-
 ```
-
-
 
 # Examples
 
