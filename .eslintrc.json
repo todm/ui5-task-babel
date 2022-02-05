@@ -19,5 +19,6 @@
         "sap": true
     },
     "rules": {
+        "no-console": "warn"
     }
 }

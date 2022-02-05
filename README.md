@@ -14,11 +14,16 @@ npm i -D @todms/ui5-task-babel
 
 Add the package to the ui5 dependencies of `package.json`
 
-```yaml
-"ui5": { "dependencies": [
-        #...
-        "@todms/ui5-task-babel",
-      ] }
+```json
+{
+    // ...
+    "ui5": {
+        "dependencies": [
+            // ...
+            "@todms/ui5-task-babel"
+        ]
+    }
+}
 ```
 
 # Include Task and Middleware
@@ -29,18 +34,18 @@ Task:
 
 ```yaml
 builder:
-  customTasks:
-    - name: ui5-task-babel
-      beforeTask: generateComponentPreload
+    customTasks:
+        - name: ui5-task-babel
+          beforeTask: generateComponentPreload
 ```
 
 Server Middleware:
 
 ```yaml
 server:
-  customMiddleware:
-    - name: ui5-middleware-babel
-      beforeMiddleware: serveResources
+    customMiddleware:
+        - name: ui5-middleware-babel
+          beforeMiddleware: serveResources
 ```
 
 # Configuration
@@ -96,34 +101,35 @@ npm i -D core-js-bundle regenerator-runtime
 
 Then add those packages as ui5 dependencies
 
-```yaml
-# package.json
-"ui5": { "dependencies": [
-        #...
-        "@todms/ui5-task-babel",
-        "core-js-bundle",
-        "regenerator-runtime",
-      ] }
+```json
+// package.json
+{
+    "ui5": {
+        "dependencies": [
+            //...
+            "@todms/ui5-task-babel",
+            "core-js-bundle",
+            "regenerator-runtime"
+        ]
+    }
+}
 ```
 
 Regenerator-runtime and core-js will now be added to your projects resource folder.
 You can register them in your `manifest.json`, import them directly in a controller or use them in html as a script tag.
 
-```yaml
-# manifest.json
+```json
+// manifest.json
 {
-  # ...
-  "sap.ui5":
-    {
-      "resources":
-        {
-          "js":
-            [
-              { "uri": "/resources/polyfills/core-js-bundle/minified.js" },
-              { "uri": "/resources/polyfills/regenerator-runtime/runtime.js" },
-            ],
-        },
-    },
+    // ...
+    "sap.ui5": {
+        "resources": {
+            "js": [
+                { "uri": "/resources/polyfills/core-js-bundle/minified.js" },
+                { "uri": "/resources/polyfills/regenerator-runtime/runtime.js" }
+            ]
+        }
+    }
 }
 ```
 
@@ -140,24 +146,23 @@ npm i -D @babel/preset-typescript @sapui5/ts-types
 
 Add preset to babel configuration
 
-```yaml
-# babel.config.json
+```json
+// babel.config.json
 { "presets": ["@babel/preset-typescript"], "sourceMaps": "inline" }
 ```
 
 Add a `tsconfig.json` file to configure the typescript compiler and add the installed types
 
-```yaml
-# tsconfig.json
+```json
+// tsconfig.json
 {
-  "compilerOptions":
-    {
-      "target": "ES3",
-      "module": "ES2020",
-      "moduleResolution": "Node",
-      "strict": false,
-      "types": ["@ui5/ts-types"],
-    },
+    "compilerOptions": {
+        "target": "ES3",
+        "module": "ES2020",
+        "moduleResolution": "Node",
+        "strict": false,
+        "types": ["@ui5/ts-types"]
+    }
 }
 ```
 
@@ -166,18 +171,18 @@ Change task/middleware configuarion in ui5.yaml
 ```yaml
 # ui5.yaml
 builder:
-  customTasks:
-    - name: ui5-task-babel
-      beforeTask: generateComponentPreload
-      configuration:
-        include: ["**/*.ts"]
-        forceExtension: "js"
+    customTasks:
+        - name: ui5-task-babel
+          beforeTask: generateComponentPreload
+          configuration:
+              include: ['**/*.ts']
+              forceExtension: 'js'
 server:
-  customMiddleware:
-    - name: ui5-middleware-babel
-      beforeMiddleware: serveResources
-      configuration:
-        searchInclude: ["**/*.ts", "**/*.js"]
+    customMiddleware:
+        - name: ui5-middleware-babel
+          beforeMiddleware: serveResources
+          configuration:
+              searchInclude: ['**/*.ts', '**/*.js']
 ```
 
 With this configuration all `.ts` files will be transformed to javascript both in builds and dev server
