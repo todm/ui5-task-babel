@@ -8,11 +8,11 @@ resources:
       webapp: ./test/webapp
 builder:
   customTasks:
-    - name: babel-task
+    - name: ui5-task-babel
       beforeTask: generateComponentPreload
 server:
   customMiddleware:
-    - name: babel-middleware
+    - name: ui5-middleware-babel
       beforeMiddleware: serveResources
 
 ---
@@ -20,14 +20,14 @@ specVersion: "2.3"
 kind: extension
 type: task
 metadata:
-  name: babel-task
+  name: ui5-task-babel
 task:
-  path: lib/babel/task.js
+  path: dist/task.js
 ---
 specVersion: "2.3"
 kind: extension
 type: server-middleware
 metadata:
-  name: babel-middleware
+  name: ui5-middleware-babel
 middleware:
-  path: lib/babel/middleware.js
+  path: dist/middleware.js

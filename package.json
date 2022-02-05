@@ -1,6 +1,6 @@
 {
   "name": "@todms/ui5-task-babel",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "UI5 task and middleware for transpiling next-gen js into backwards compatible code using BabelJS",
   "main": "index.js",
   "directories": {
@@ -14,10 +14,23 @@
     "micromatch": "^4.0.4"
   },
   "devDependencies": {
-    "@ui5/cli": "^2.10.3"
+    "@types/babel__core": "^7.1.18",
+    "@types/express": "^4.17.13",
+    "@types/micromatch": "^4.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.10.2",
+    "@typescript-eslint/parser": "^5.10.2",
+    "@ui5/cli": "^2.10.3",
+    "eslint": "^8.8.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.5.5",
+    "ui5-tooling-types": "git+https://github.com/todm/ui5-tooling-types.git"
   },
   "scripts": {
-    "test": "ui5 build --config ./test/ui5-test.yaml --dest ./test/dist --clean-dest"
+    "build": "rimraf dist && tsc -p .",
+    "test": "npm run build && npm run test:builder && npm run test:server",
+    "test:builder": "ui5 build --config ./test/ui5-test.yaml --dest ./test/dist --clean-dest",
+    "test:server": "ui5 serve --config ./test/ui5-test.yaml --open=/Main.controller.js",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -39,6 +52,6 @@
   "homepage": "https://github.com/todm/ui5-task-babel#readme",
   "files": [
     "ui5.yaml",
-    "lib/*/**.*"
+    "dist"
   ]
 }
