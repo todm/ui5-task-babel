@@ -1,41 +1,42 @@
-specVersion: "2.3"
+specVersion: '3.0'
 kind: extension
 type: task
 metadata:
-  name: ui5-task-babel
+    name: ui5-task-babel
 task:
-  path: dist/task.js
+    path: dist/task.js
 ---
-specVersion: "2.3"
+specVersion: '3.0'
 kind: extension
 type: server-middleware
 metadata:
-  name: ui5-middleware-babel
+    name: ui5-middleware-babel
 middleware:
-  path: dist/middleware.js
+    path: dist/middleware.js
 ---
-specVersion: "2.3"
+specVersion: '3.0'
 kind: extension
 type: project-shim
 metadata:
-  name: ui5-task-babel-polyfill
+    name: ui5-task-babel-polyfill
 shims:
-  configurations:
-    core-js-bundle:
-      specVersion: "2.3"
-      type: module
-      metadata:
-        name: core-js-bundle
-      resources:
-        configuration:
-          paths:
-            /resources/polyfills/core-js-bundle/: ""
-    regenerator-runtime:
-      specVersion: "2.3"
-      type: module
-      metadata:
-        name: regenerator-runtime
-      resources:
-        configuration:
-          paths:
-            /resources/polyfills/regenerator-runtime/: ""
+    configurations:
+        core-js-bundle:
+            specVersion: '3.0'
+            type: module
+            metadata:
+                name: core-js-bundle
+            resources:
+                configuration:
+                    paths:
+                        /resources/polyfills/core-js-bundle/: ""
+    configurations:
+        regenerator-runtime:
+            specVersion: '3.0'
+            type: module
+            metadata:
+                name: regenerator-runtime
+            resources:
+                configuration:
+                    paths:
+                        /resources/polyfills/regenerator-runtime/: ""

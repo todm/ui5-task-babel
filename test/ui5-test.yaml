@@ -1,33 +1,36 @@
-specVersion: '2.3'
-metadata:
-  name: ui5-task-babel
+specVersion: '3.0'
 type: application
+metadata:
+    name: my.app
 resources:
-  configuration:
-    paths:
-      webapp: ./test/webapp
+    configuration:
+        paths:
+            webapp: ./test/webapp
 builder:
-  customTasks:
-    - name: ui5-task-babel
-      beforeTask: generateComponentPreload
+    customTasks:
+        - name: ui5-task-babel
+          beforeTask: generateComponentPreload
+          configuration:
+              pretty: true
 server:
-  customMiddleware:
-    - name: ui5-middleware-babel
-      beforeMiddleware: serveResources
-
+    customMiddleware:
+        - name: ui5-middleware-babel
+          beforeMiddleware: serveResources
+          configuration:
+              pretty: true
 ---
-specVersion: "2.3"
+specVersion: '3.0'
 kind: extension
 type: task
 metadata:
-  name: ui5-task-babel
+    name: ui5-task-babel
 task:
-  path: dist/task.js
+    path: dist/task.js
 ---
-specVersion: "2.3"
+specVersion: '3.0'
 kind: extension
 type: server-middleware
 metadata:
-  name: ui5-middleware-babel
+    name: ui5-middleware-babel
 middleware:
-  path: dist/middleware.js
+    path: dist/middleware.js
