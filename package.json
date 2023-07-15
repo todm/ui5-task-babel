@@ -1,6 +1,6 @@
 {
   "name": "@todms/ui5-task-babel",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "UI5 task and middleware for transpiling next-gen js into backwards compatible code using BabelJS",
   "main": "index.js",
   "directories": {
