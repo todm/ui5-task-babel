@@ -32,8 +32,6 @@ const middlewareFunction: MiddlewareFunction<MiddlewareConfig> = ({ options, mid
         callback: r => micromatch.isMatch(r.getPath(), config.searchInclude, { ignore: config.searchExclude })
     });
 
-    const writer = (<any>middlewareUtil.getProject().getReader())._readers.find((w: any) => !!w.write) as AbstractReaderWriter;
-
     return async (req, res, next) => {
         try {
             const path = middlewareUtil.getPathname(req);
@@ -48,14 +46,7 @@ const middlewareFunction: MiddlewareFunction<MiddlewareConfig> = ({ options, mid
             const contents = await resource.getString();
             const transformed = await transformer.transform(contents, resource.getPath());
 
-            const file = middlewareUtil.resourceFactory.createResource({
-                path,
-                string: transformed,
-                statInfo: resource.getStatInfo()
-            });
-            await writer.write(file);
-
-            next();
+            res.end(transformed);
         } catch (ex: any) {
             log.error(ex.message || 'unknown error');
             switch (config.onError) {
