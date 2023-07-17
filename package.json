@@ -1,12 +1,12 @@
 {
     "name": "@todms/ui5-task-babel",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "description": "UI5 task and middleware for transpiling next-gen js into backwards compatible code using BabelJS",
     "scripts": {
         "build": "tsc -p .",
         "builder": "npm run build && ui5 build --config test/ui5-test.yaml --dest test/dist --clean-dest",
         "server": "npm run build && ui5 serve --config ./test/ui5-test.yaml",
-        "deploy": "npm run build && npm deploy",
+        "publish": "npm run build && npm publish",
         "lint": "eslint ."
     },
     "keywords": [
