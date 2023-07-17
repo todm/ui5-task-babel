@@ -30,7 +30,6 @@ shims:
                 configuration:
                     paths:
                         /resources/polyfills/core-js-bundle/: ""
-    configurations:
         regenerator-runtime:
             specVersion: '3.0'
             type: module
