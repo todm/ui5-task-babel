@@ -1,11 +1,15 @@
 import { MiddlewareFunction } from '@ui5/server';
-import { MiddlewareConfig } from '../types';
+import { BaseConfig, splitPathExtension } from './utils';
+import BabelTransformer from './transformer';
 import micromatch from 'micromatch';
-import { Resource } from '@ui5/fs';
-import { includeFiles, Logger, removeFileExtension, Transpiler } from '.';
-import { Request } from 'express';
 
-const middleware: MiddlewareFunction = ({ resources, options }) => {
+interface MiddlewareConfig extends BaseConfig {
+    searchInclude: string | string[];
+    searchExclude: string | string[];
+    onError: 'next' | 'error' | 'exit';
+}
+
+const middlewareFunction: MiddlewareFunction<MiddlewareConfig> = ({ options, middlewareUtil, resources, log }) => {
     const config: MiddlewareConfig = {
         include: ['**/*.js'],
         exclude: [],
@@ -13,56 +17,47 @@ const middleware: MiddlewareFunction = ({ resources, options }) => {
             presets: ['@babel/preset-env'],
             sourceMaps: 'inline'
         },
-        searchInclude: ['**/*.js'],
-        passFile: false,
         iife: true,
+        searchInclude: ['**/*.js'],
+        searchExclude: [],
         onError: 'error',
         ...options.configuration
     };
 
-    const transpiler = new Transpiler(config);
+    const transformer = new BabelTransformer(config.babelConfig, config.iife);
 
-    return async (req: PRequest, res, next) => {
+    const reader = middlewareUtil.resourceFactory.createFilterReader({
+        reader: resources.all,
+        callback: r => micromatch.isMatch(r.getPath(), config.searchInclude, { ignore: config.searchExclude })
+    });
+
+    return async (req, res, next) => {
         try {
-            const matched = !!micromatch([req.path], config.include).length && !micromatch([req.path], config.exclude).length;
+            const path = middlewareUtil.getPathname(req);
+            const matched = micromatch.isMatch(path, config.include, { ignore: config.exclude });
             if (!matched) return next();
 
-            let file: Resource;
-            if (req.passedFile) {
-                file = req.passedFile;
-            } else {
-                let potentialFiles = await resources.rootProject.byGlob(removeFileExtension(req.path) + '.*');
-                potentialFiles = includeFiles(potentialFiles, config.searchInclude);
-                if (!potentialFiles.length) return next();
-                file = potentialFiles[0];
-            }
+            const searchString = splitPathExtension(path)[0] + '.*';
+            const potentialResources = await reader.byGlob(searchString);
+            const resource = potentialResources[0];
+            if (!resource) return next();
 
-            const code = await file.getString();
-            const result = await transpiler.transpile(code, file.getPath()); // <------------------------------------------------------------------------------------------
+            const contents = await resource.getString();
+            const transformed = await transformer.transform(contents, resource.getPath());
 
-            if (config.passFile) {
-                file.setString(result);
-                req.passedFile = file;
-                return next();
-            }
-            res.end(result);
-        } catch (ex) {
-            const msg = (<Error>ex).message || 'Unknown Error';
-            Logger.error(msg);
+            res.end(transformed);
+        } catch (ex: any) {
+            log.error(ex.message || 'unknown error');
             switch (config.onError) {
                 case 'next':
                     return next();
-                case 'error':
-                    return res.status(503).end();
+                case 'exit':
+                    return process.exit(-1);
                 default:
-                    process.exit(-1);
+                    res.status(503).end();
             }
         }
     };
 };
 
-interface PRequest extends Request {
-    passedFile?: Resource;
-}
-
-module.exports = middleware;
+module.exports = middlewareFunction;

@@ -1,57 +1,50 @@
 {
-  "name": "@todms/ui5-task-babel",
-  "version": "2.0.0",
-  "description": "UI5 task and middleware for transpiling next-gen js into backwards compatible code using BabelJS",
-  "main": "index.js",
-  "directories": {
-    "lib": "lib",
-    "test": "test"
-  },
-  "dependencies": {
-    "@babel/core": "^7.14.0",
-    "@babel/preset-env": "^7.14.1",
-    "@ui5/logger": "^2.0.1",
-    "micromatch": "^4.0.4"
-  },
-  "devDependencies": {
-    "@types/babel__core": "^7.1.18",
-    "@types/express": "^4.17.13",
-    "@types/micromatch": "^4.0.2",
-    "@typescript-eslint/eslint-plugin": "^5.10.2",
-    "@typescript-eslint/parser": "^5.10.2",
-    "@ui5/cli": "^2.10.3",
-    "eslint": "^8.8.0",
-    "rimraf": "^3.0.2",
-    "typescript": "^4.5.5",
-    "ui5-tooling-types": "git+https://github.com/todm/ui5-tooling-types.git"
-  },
-  "scripts": {
-    "build": "rimraf dist && tsc -p .",
-    "test": "npm run build && npm run test:builder && npm run test:server",
-    "test:builder": "ui5 build --config ./test/ui5-test.yaml --dest ./test/dist --clean-dest",
-    "test:server": "ui5 serve --config ./test/ui5-test.yaml --open=/Main.controller.js",
-    "lint": "eslint ."
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/todm/ui5-task-babel.git"
-  },
-  "keywords": [
-    "ui5",
-    "babel",
-    "task",
-    "middleware",
-    "typescript",
-    "js"
-  ],
-  "author": "todm",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/todm/ui5-task-babel/issues"
-  },
-  "homepage": "https://github.com/todm/ui5-task-babel#readme",
-  "files": [
-    "ui5.yaml",
-    "dist"
-  ]
+    "name": "@todms/ui5-task-babel",
+    "version": "3.0.0",
+    "description": "UI5 task and middleware for transpiling next-gen js into backwards compatible code using BabelJS",
+    "scripts": {
+        "build": "tsc -p .",
+        "builder": "npm run build && ui5 build --config test/ui5-test.yaml --dest test/dist --clean-dest",
+        "server": "npm run build && ui5 serve --config ./test/ui5-test.yaml",
+        "deploy": "npm run build && npm deploy",
+        "lint": "eslint ."
+    },
+    "keywords": [
+        "ui5",
+        "babel",
+        "task",
+        "middleware",
+        "typescript",
+        "js"
+    ],
+    "author": "todm",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/todm/ui5-task-babel.git"
+    },
+    "bugs": {
+        "url": "https://github.com/todm/ui5-task-babel/issues"
+    },
+    "homepage": "https://github.com/todm/ui5-task-babel#readme",
+    "files": [
+        "ui5.yaml",
+        "dist"
+    ],
+    "devDependencies": {
+        "@types/babel__core": "^7.20.1",
+        "@types/express": "^4.17.17",
+        "@types/micromatch": "^4.0.2",
+        "@types/node": "^20.4.2",
+        "@typescript-eslint/eslint-plugin": "^6.0.0",
+        "@typescript-eslint/parser": "^6.0.0",
+        "@ui5/cli": "^3.3.2",
+        "eslint": "^8.45.0",
+        "typescript": "^5.1.6"
+    },
+    "dependencies": {
+        "@babel/core": "^7.22.9",
+        "@babel/preset-env": "^7.22.9",
+        "micromatch": "^4.0.5"
+    }
 }

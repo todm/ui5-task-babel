@@ -2,46 +2,36 @@
 
 Task (and **Middleware**) for transpiling next-gen javascript into backwards compatible code using [BabelJS](https://babeljs.io/). Also provides project shims for polyfills.
 
-Without any configuration the task will use `@babel/preset-env` to transpile the code. With babel config files you can further control the transpile process (e.g. typescript, ESModules...).
+Without any configuration the task will use `@babel/preset-env` to transpile the code. With babel config files you can further control the transpile process.
+
+Also supports **typescript** via the `@babel/preset-typescript` package.
+
+Check out [@todms/babel-plugin-ui5-esm](https://github.com/todm/babel-plugin-ui5-esm) for ES-Module support (`import / export`)
+
+> **Changes in v3**
+>
+> -   Support for specVersion 3
+> -   Configuration changes
+>     -   removed `passFile`
+>     -   added `searchExclude` to middleware
 
 # Installation
 
-Add the task to your project as a dev dependency.
+Add the package to your project as a dependency.
 
 ```sh
 npm i -D @todms/ui5-task-babel
 ```
 
-Add the package to the ui5 dependencies of `package.json`
-
-```json
-{
-    // ...
-    "ui5": {
-        "dependencies": [
-            // ...
-            "@todms/ui5-task-babel"
-        ]
-    }
-}
-```
-
-# Include Task and Middleware
-
-Include the task in `ui5.yaml`
-
-Task:
+Include the task and middleware in your ui5.yaml file
 
 ```yaml
+specVersion: '3.0'
+#...
 builder:
     customTasks:
         - name: ui5-task-babel
           beforeTask: generateComponentPreload
-```
-
-Server Middleware:
-
-```yaml
 server:
     customMiddleware:
         - name: ui5-middleware-babel
@@ -50,33 +40,28 @@ server:
 
 # Configuration
 
-Without any configuration the task will default to the `@babel/preset-env` preset. You can change the babel configuration by adding a babel config file (`babel.config.js`) or by changing the babelConfig object in the task configuration. Config files will override the babel configuration in ui5.yaml
+Without any configuration the task transpile all `*.js` files with the `@babel/preset-env` preset. You can change the babel configuration by adding a babel config file (`babel.config.js`) or by changing the babelConfig object in the task configuration. Config files will override the babel configuration in `ui5.yaml`.
 
-## Task Configuration
-
-You can add the following configurations to the task:
+**Task Configuration**
 
 | Name           | Type                 | Default                        | Description                                           |
 | -------------- | -------------------- | ------------------------------ | ----------------------------------------------------- |
-| include        | `string \| string[]` | `[**/*.js]`                    | Files that should be transformed                      |
+| include        | `string \| string[]` | `['**/*.js']`                  | Files that should be transformed                      |
 | exclude        | `string \| string[]` | `[]`                           | Files that should not me transformed                  |
 | babelConfig    | `Object`             | preset-env + Inline SourceMaps | Babel configuration                                   |
 | forceExtension | `string \| false`    | `false`                        | Force a specific file extension for transformed files |
 | iife           | `boolen`             | `true`                         | Wraps code as iife to ensure top level scope          |
 
-## Middleware Configuration
+**Middleware Configuration**
 
-You can add the following configurations to the middleware:
-
-| Name          | Type                      | Default                        | Description                                                                                                                               |
-| ------------- | ------------------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| include       | `string \| string[]`      | `[**/*.js]`                    | Files that should be included                                                                                                             |
-| exclude       | `string \| string[]`      | `[]`                           | Files that should be excluded                                                                                                             |
-| babelConfig   | `Object`                  | preset-env + Inline SourceMaps | Babel configuration                                                                                                                       |
-| searchInclude | `string \| string[]`      | `[**/*.js]`                    | Files that should be included when Searching the project for fitting files                                                                |
-| passFile      | `boolean`                 | `false`                        | Wether the file should be passed to the next middleware (Only works if next middleware checks `req.passedFile`)                           |
-| iife          | `boolen`                  | `true`                         | Wraps code as iife to ensure top level scope                                                                                              |
-| onError       | `'next'\|'error'\|'exit'` | `'error'`                      | Defines behaviour when an error occures. `next`: next middleware will be called, `error`: server will return 503, `exit`: Server will end |
+| Name          | Type                      | Default                        | Description                                                                                                                                           |
+| ------------- | ------------------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| include       | `string \| string[]`      | `['**/*.js']`                  | Files that should be included                                                                                                                         |
+| exclude       | `string \| string[]`      | `[]`                           | Files that should be excluded                                                                                                                         |
+| babelConfig   | `Object`                  | preset-env + Inline SourceMaps | Babel configuration                                                                                                                                   |
+| searchInclude | `string \| string[]`      | `['**/*.js']`                  | Files that should be included when Searching the project for fitting files                                                                            |
+| iife          | `boolen`                  | `true`                         | Wraps code as iife to ensure top level scope                                                                                                          |
+| onError       | `'next'\|'error'\|'exit'` | `'error'`                      | Defines behaviour when an error occures. <br>`next`: next middleware will be called, <br>`error`: server will return 503, <br>`exit`: Server will end |
 
 # Regenerator-Runtime and Polyfills
 
@@ -99,22 +84,6 @@ Add regenerator-runtime and core-js-bundle as dependencies
 npm i -D core-js-bundle regenerator-runtime
 ```
 
-Then add those packages as ui5 dependencies
-
-```json
-// package.json
-{
-    "ui5": {
-        "dependencies": [
-            //...
-            "@todms/ui5-task-babel",
-            "core-js-bundle",
-            "regenerator-runtime"
-        ]
-    }
-}
-```
-
 Regenerator-runtime and core-js will now be added to your projects resource folder.
 You can register them in your `manifest.json`, import them directly in a controller or use them in html as a script tag.
 
@@ -135,20 +104,26 @@ You can register them in your `manifest.json`, import them directly in a control
 
 # Examples
 
-## Setting up typescript support
+**Basic usage**
+
+```js
+const myVar = window?.location;
+```
+Output:
+```js
+(function(){"use strict";
+    var _window;
+    var myVar = (_window = window) === null || _window === void 0 ? void 0 : _window.location;
+})()
+```
+
+**Configuring typescript**
 
 Install typescript preset and ui5 types
 
 ```sh
 npm i -D @babel/preset-typescript @sapui5/ts-types
 # if you want to setup ESModules install @sapui5/ts-types-esm instead
-```
-
-Add preset to babel configuration
-
-```json
-// babel.config.json
-{ "presets": ["@babel/preset-typescript"], "sourceMaps": "inline" }
 ```
 
 Add a `tsconfig.json` file to configure the typescript compiler and add the installed types
@@ -175,14 +150,14 @@ builder:
         - name: ui5-task-babel
           beforeTask: generateComponentPreload
           configuration:
-              include: ['**/*.ts']
-              forceExtension: 'js'
+              include: ['**/*.ts'] # include all .ts files
+              forceExtension: 'js' # rename all included files to *.js
 server:
     customMiddleware:
         - name: ui5-middleware-babel
           beforeMiddleware: serveResources
           configuration:
-              searchInclude: ['**/*.ts', '**/*.js']
+              searchInclude: ['**/*.ts', '**/*.js'] # if file.ts is requested the middleware will search for file.ts and file.js
 ```
 
 With this configuration all `.ts` files will be transformed to javascript both in builds and dev server
