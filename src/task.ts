@@ -40,7 +40,7 @@ const taskFunction: TaskFunction<TaskConfig> = async ({ options, taskUtil, works
                 file.setPath(path + '.' + config.forceExtension);
                 taskUtil.setTag(resource, taskUtil.STANDARD_TAGS.OmitFromBuildResult);
             }
-            await workspace.write(file);
+            await workspace.write(file, { drain: true });
         })
     );
 };

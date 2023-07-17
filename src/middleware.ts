@@ -2,7 +2,6 @@ import { MiddlewareFunction } from '@ui5/server';
 import { BaseConfig, splitPathExtension } from './utils';
 import BabelTransformer from './transformer';
 import micromatch from 'micromatch';
-import { AbstractReaderWriter } from '@ui5/fs';
 
 interface MiddlewareConfig extends BaseConfig {
     searchInclude: string | string[];
