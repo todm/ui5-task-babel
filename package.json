@@ -1,8 +1,7 @@
 {
     "name": "@todms/ui5-task-babel",
     "version": "3.0.0",
-    "description": "",
-    "main": "index.js",
+    "description": "UI5 task and middleware for transpiling next-gen js into backwards compatible code using BabelJS",
     "scripts": {
         "build": "tsc -p .",
         "builder": "npm run build && ui5 build --config test/ui5-test.yaml --dest test/dist --clean-dest",
@@ -10,9 +9,28 @@
         "deploy": "npm run build && npm deploy",
         "lint": "eslint ."
     },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
+    "keywords": [
+        "ui5",
+        "babel",
+        "task",
+        "middleware",
+        "typescript",
+        "js"
+    ],
+    "author": "todm",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/todm/ui5-task-babel.git"
+    },
+    "bugs": {
+        "url": "https://github.com/todm/ui5-task-babel/issues"
+    },
+    "homepage": "https://github.com/todm/ui5-task-babel#readme",
+    "files": [
+        "ui5.yaml",
+        "dist"
+    ],
     "devDependencies": {
         "@types/babel__core": "^7.20.1",
         "@types/express": "^4.17.17",
